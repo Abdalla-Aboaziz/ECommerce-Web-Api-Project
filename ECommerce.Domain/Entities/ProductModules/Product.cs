@@ -22,5 +22,7 @@ namespace ECommerce.Domain.Entities.ProductModules
         public ProductType ProductType { get; set; } = default!;
 
         #endregion
+        // test initial commit
+
     }
 }

@@ -1,5 +1,7 @@
 
+using ECommerce.Domain.Contracts;
 using ECommerce.Presistance.Data.DBContexts;
+using ECommerceWeb.Extentions;
 using Microsoft.EntityFrameworkCore;
 
 namespace ECommerceWeb
@@ -23,6 +25,11 @@ namespace ECommerceWeb
             });
 
             var app = builder.Build();
+
+            #region DataSeeding
+            app.MigrateDatabase();
+             app.SeedData();
+            #endregion
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

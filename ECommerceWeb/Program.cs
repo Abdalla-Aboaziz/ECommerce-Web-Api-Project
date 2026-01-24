@@ -3,12 +3,13 @@ using ECommerce.Domain.Contracts;
 using ECommerce.Presistance.Data.DBContexts;
 using ECommerceWeb.Extentions;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace ECommerceWeb
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -27,8 +28,8 @@ namespace ECommerceWeb
             var app = builder.Build();
 
             #region DataSeeding
-            app.MigrateDatabase();
-             app.SeedData();
+             await  app.MigrateDatabaseAsync();
+            await app.SeedDataAsync();
             #endregion
 
             // Configure the HTTP request pipeline.

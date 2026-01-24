@@ -20,31 +20,31 @@ namespace ECommerce.Presistance.Data.DataSeeding
         {
           _dbContext = dbContext;
         }
-        public void Initialize()
+        public async Task InitializeAsync()
         {
             try
             {
                 // Check if he has any products or brands or types  Before
-                var hasProducts = _dbContext.Products.Any();
-                var hasBrands = _dbContext.ProductBrands.Any();
-                var hasTypes = _dbContext.ProductTypes.Any();
+                var hasProducts =await _dbContext.Products.AnyAsync();
+                var hasBrands = await _dbContext.ProductBrands.AnyAsync();
+                var hasTypes = await _dbContext.ProductTypes.AnyAsync();
 
 
                 if (hasProducts && hasBrands && hasTypes) return;
 
                 if (!hasBrands) 
                 {
-                SeedDataFromJson<ProductBrand,int>("brands.json", _dbContext.ProductBrands);
+                    await SeedDataFromJson<ProductBrand,int>("brands.json", _dbContext.ProductBrands);
                 }
                 if (!hasTypes)
-                { 
-                SeedDataFromJson<ProductType,int>("types.json", _dbContext.ProductTypes);
-                     _dbContext.SaveChanges();
+                {
+                    await SeedDataFromJson<ProductType,int>("types.json", _dbContext.ProductTypes);
+                    await _dbContext.SaveChangesAsync();
                 }
                 if (!hasProducts)
-                { 
-                SeedDataFromJson<Product,int>("products.json", _dbContext.Products);
-                    _dbContext.SaveChanges();
+                {
+                    await SeedDataFromJson<Product,int>("products.json", _dbContext.Products);
+                    await _dbContext.SaveChangesAsync();
                 }
 
             }
@@ -57,7 +57,7 @@ namespace ECommerce.Presistance.Data.DataSeeding
         }
 
         #region Helper Method
-   private void SeedDataFromJson<T,TKey>(string fileName,DbSet<T> dbset) where T : BaseEnitiy<TKey>
+   private async Task SeedDataFromJson<T,TKey>(string fileName,DbSet<T> dbset) where T : BaseEnitiy<TKey>
         {
             //D:\00-Projects\API\ECommerce\ECommerce.Presistance\Data\DataSeeding\JSONFiles\
 
@@ -69,13 +69,13 @@ namespace ECommerce.Presistance.Data.DataSeeding
             {
                 using var DataStream = File.OpenRead(FilePath);
 
-                var Data=JsonSerializer.Deserialize<List<T>>(DataStream,new JsonSerializerOptions()
+                var Data=await JsonSerializer.DeserializeAsync<List<T>>(DataStream,new JsonSerializerOptions()
                 {
                     PropertyNameCaseInsensitive=true
                 });
                 if (Data != null && Data.Count > 0)
                 {
-                    dbset.AddRange(Data);
+                  await  dbset.AddRangeAsync(Data);
                    // _dbContext.SaveChanges();
                 }
             }

@@ -6,22 +6,23 @@ namespace ECommerceWeb.Extentions
 {
     public static class WebApplicationRegistration
     {
-        public static WebApplication MigrateDatabase (this WebApplication app)
+        public static async Task<WebApplication> MigrateDatabaseAsync(this WebApplication app)
         {
-            using var scope = app.Services.CreateScope();
+            await using var scope =  app.Services.CreateAsyncScope();
             var dbcontextService = scope.ServiceProvider.GetRequiredService<StoreDbContext>();
-            if (dbcontextService.Database.GetPendingMigrations().Any())
+            var PendingmMigration = await dbcontextService.Database.GetPendingMigrationsAsync();
+            if (PendingmMigration.Any())
             {
-                dbcontextService.Database.Migrate();
+                await dbcontextService.Database.MigrateAsync();
             }
            return app;
         }
 
-        public static WebApplication SeedData (this WebApplication app)
+        public static async Task<WebApplication> SeedDataAsync(this WebApplication app)
         {
-            using var scope = app.Services.CreateScope();
+            await using var scope =  app.Services.CreateAsyncScope();
             var dataInitializer = scope.ServiceProvider.GetRequiredService<IDataInitializer>();
-            dataInitializer.Initialize();
+            await dataInitializer.InitializeAsync();
             return app;
         }
     }

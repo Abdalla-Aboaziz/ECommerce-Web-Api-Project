@@ -1,6 +1,8 @@
 
 using ECommerce.Domain.Contracts;
 using ECommerce.Presistance.Data.DBContexts;
+using ECommerce.Presistance.Repository;
+using ECommerce.Service.MappingProfiles;
 using ECommerceWeb.Extentions;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
@@ -24,6 +26,10 @@ namespace ECommerceWeb
             {
                 opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
+            #region Service Registeration
+            builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
+            builder.Services.AddAutoMapper(x=>x.AddProfile(typeof(ProductProfile)));
+            #endregion
 
             var app = builder.Build();
 

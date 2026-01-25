@@ -22,6 +22,12 @@ namespace ECommerce.Presistance.Repository
 
         public async Task<IEnumerable<TEnity>> GetAllAsync() =>await _dbContext.Set<TEnity>().ToListAsync();
 
+        public async Task<IEnumerable<TEnity>> GetAllAsync(ISpecification<TEnity, TKey> specification)
+        {
+           var Query = SpecificationEvaluator.CreateQuery(_dbContext.Set<TEnity>(), specification); 
+
+              return await Query.ToListAsync();
+        }
 
         public async Task<TEnity?> GetByIdAsync(TKey id) => await _dbContext.Set<TEnity>().FindAsync(id);
 

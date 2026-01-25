@@ -59,9 +59,9 @@ namespace ECommerce.Presistance.Data.DataSeeding
         #region Helper Method
    private async Task SeedDataFromJson<T,TKey>(string fileName,DbSet<T> dbset) where T : BaseEnitiy<TKey>
         {
-            //D:\00-Projects\API\ECommerce\ECommerce.Presistance\Data\DataSeeding\JSONFiles\
+       // D:\00 - Projects\API\ECommerce\ECommerce.Presistance\Data\DataSeeding\JSONFiles
 
-            var FilePath = @"..ECommerce.Presistance\Data\DataSeeding\JSONFiles\" + fileName;
+        var FilePath = @"..\ECommerce.Presistance\Data\DataSeeding\JSONFiles\" + fileName;
 
             if (!File.Exists(FilePath)) throw new FileNotFoundException($"Json File Not Found at Path: {FilePath}");
 

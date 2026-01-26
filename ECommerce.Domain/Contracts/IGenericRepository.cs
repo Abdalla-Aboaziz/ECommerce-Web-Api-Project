@@ -13,6 +13,7 @@ namespace ECommerce.Domain.Contracts
         Task<IEnumerable<TEntity>> GetAllAsync();
 
         Task<TEntity?> GetByIdAsync(TKey id);
+        Task<TEntity?> GetByIdAsync(ISpecification<TEntity,TKey> specification);
         Task AddAsync(TEntity entity);
         void Update(TEntity entity);
         void Remove(TEntity entity);

@@ -32,6 +32,8 @@ namespace ECommerceWeb
                     opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
                 }); 
             #endregion
+
+
             #region Service Registeration
             builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
             //builder.Services.AddAutoMapper(x=>x.AddProfile(typeof(ProductProfile)));

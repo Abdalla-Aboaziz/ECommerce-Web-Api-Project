@@ -19,6 +19,10 @@ namespace ECommerce.Presistance
             var Query = EntireyPoint;
             if (specification is not null)
             {
+                if (specification.Criteria is not null)
+                {
+                    Query = Query.Where(specification.Criteria);
+                }
                 if (specification.IncludeExpression is not null && specification.IncludeExpression.Any())
                 {
                     //foreach (var includeExpression in specification.IncludeExpression)

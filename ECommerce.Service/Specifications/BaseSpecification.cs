@@ -11,11 +11,19 @@ namespace ECommerce.Service.Specifications
 {
     public abstract class BaseSpecification<TEntity, TKey> : ISpecification<TEntity, TKey> where TEntity : BaseEnitiy<TKey>
     {
+        public Expression<Func<TEntity, bool>> Criteria { get;  }
+        protected BaseSpecification(Expression<Func<TEntity, bool>> criteria)
+        {
+            Criteria= criteria;
+        }
+        #region Include
         public ICollection<Expression<Func<TEntity, object>>> IncludeExpression { get; } = [];
+
 
         protected void AddInclude(Expression<Func<TEntity, object>> includeExpression)
         {
             IncludeExpression.Add(includeExpression);
-        }
+        } 
+        #endregion
     }
 }

@@ -26,11 +26,17 @@ namespace ECommerce.Presistance.Repository
         {
            var Query = SpecificationEvaluator.CreateQuery(_dbContext.Set<TEnity>(), specification); 
 
-              return await Query.ToListAsync();
+              return await Query.ToListAsync(); // we are using ToListAsync to get all entities based on specification
         }
 
         public async Task<TEnity?> GetByIdAsync(TKey id) => await _dbContext.Set<TEnity>().FindAsync(id);
 
+        public async Task<TEnity?> GetByIdAsync(ISpecification<TEnity, TKey> specification)
+        {
+           var Query = await SpecificationEvaluator.CreateQuery(_dbContext.Set<TEnity>(), specification)
+                .FirstOrDefaultAsync(); // we are using FirstOrDefaultAsync to get single entity based on specification
+            return Query;
+        }
 
         public void Remove(TEnity entity) => _dbContext.Set<TEnity>().Remove(entity);
 

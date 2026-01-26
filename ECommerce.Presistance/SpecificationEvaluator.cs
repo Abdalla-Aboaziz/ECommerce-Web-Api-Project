@@ -33,6 +33,15 @@ namespace ECommerce.Presistance
                     Query = specification.IncludeExpression
                         .Aggregate(Query, (current, includeExpression) => current.Include(includeExpression));
                 }
+
+                if (specification.OrderBy is not null)
+                {
+                    Query = Query.OrderBy(specification.OrderBy);
+                }
+                if (specification.OrderByDescending is not null)
+                {
+                    Query = Query.OrderByDescending(specification.OrderByDescending);
+                }
             }
             return Query;
         }

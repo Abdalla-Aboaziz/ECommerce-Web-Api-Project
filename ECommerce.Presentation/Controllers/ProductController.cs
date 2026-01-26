@@ -18,9 +18,9 @@ namespace ECommerce.Presentation.Controllers
 
         [HttpGet]
         // GET: api/Product
-        public async Task<ActionResult<IEnumerable<ProductDTO>>> GetAllProducts()
+        public async Task<ActionResult<IEnumerable<ProductDTO>>> GetAllProducts(int? brandId,int? typeId)
         {
-            var products = await _productServices.GetAllProductsAsync();
+            var products = await _productServices.GetAllProductsAsync(brandId,typeId);
             return Ok(products);
         }
 

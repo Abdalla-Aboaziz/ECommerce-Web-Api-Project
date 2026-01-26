@@ -1,4 +1,5 @@
 ﻿using ECommerce.Domain.Entities.ProductModules;
+using ECommerce.Shared;
 
 namespace ECommerce.Service.Specifications
 {
@@ -14,7 +15,9 @@ namespace ECommerce.Service.Specifications
 
         }
         //  (Get All Products)
-        public ProductWithBrandsAndTypeSpecification(int? brandId, int? typeId) : base(p => (!brandId.HasValue|| p.BrandId == brandId.Value) && (typeId == null || p.TypeId == typeId))
+        public ProductWithBrandsAndTypeSpecification(ProductQueryParams queryParams)
+            : base(p => (!queryParams.BrandId.HasValue || p.BrandId == queryParams.BrandId.Value) && (queryParams.TypeId == null || p.TypeId == queryParams.TypeId) &&
+            (string.IsNullOrEmpty(queryParams.Search) || p.Name.ToLower().Contains(queryParams.Search.ToLower())))
         {
             //brandid is not null
             // typeid is not null

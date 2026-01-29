@@ -46,6 +46,8 @@ namespace ECommerceWeb
             {
                 return ConnectionMultiplexer.Connect(builder.Configuration.GetConnectionString("RedisConnection")!);
             });
+            builder.Services.AddScoped<IBasketRepository,BasketRepository>();
+            builder.Services.AddScoped<IBasketServices, BasketServices>();
 
             #endregion
 

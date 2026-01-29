@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace ECommerce.Presistance.Repository
 {
-    internal class BasketRepository : IBasketRepository
+    public class BasketRepository : IBasketRepository
     {
       
         private readonly IDatabase _database;
@@ -20,7 +20,7 @@ namespace ECommerce.Presistance.Repository
         {
             _database = connection.GetDatabase();
         }
-        public async Task<CustomerBasket> CreateCustomerBasketAsync(CustomerBasket basket, TimeSpan timetolive = default)
+        public async Task<CustomerBasket> CreateOrUpdateBasketAsync(CustomerBasket basket, TimeSpan timetolive = default)
         {
             var JsonBasket =JsonSerializer.Serialize(basket);
             var IsCreatedOrUpdated = await  _database.StringSetAsync(basket.Id, JsonBasket,

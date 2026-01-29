@@ -48,6 +48,8 @@ namespace ECommerceWeb
             });
             builder.Services.AddScoped<IBasketRepository,BasketRepository>();
             builder.Services.AddScoped<IBasketServices, BasketServices>();
+            builder.Services.AddScoped<ICachRepository,CachRepository>();
+            builder.Services.AddScoped<ICashService,CashService>();
 
             #endregion
 

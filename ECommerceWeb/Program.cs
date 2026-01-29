@@ -9,6 +9,7 @@ using ECommerce.ServiceAbstraction;
 using ECommerceWeb.Extentions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using StackExchange.Redis;
 using System.Threading.Tasks;
 
 namespace ECommerceWeb
@@ -41,6 +42,10 @@ namespace ECommerceWeb
             builder.Services.AddAutoMapper(typeof(ServiceAssemplyRefrence).Assembly);
             builder.Services.AddScoped<IProductServices,ProductService>();
             builder.Services.AddScoped<IDataInitializer,DataIntializer>();
+            builder.Services.AddSingleton<IConnectionMultiplexer>(s =>
+            {
+                return ConnectionMultiplexer.Connect(builder.Configuration.GetConnectionString("RedisConnection")!);
+            });
 
             #endregion
 

@@ -8,7 +8,9 @@ using ECommerce.Service.MappingProfiles;
 using ECommerce.ServiceAbstraction;
 using ECommerceWeb.CustomeMiddleWare;
 using ECommerceWeb.Extentions;
+using ECommerceWeb.Factory;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;
@@ -52,6 +54,12 @@ namespace ECommerceWeb
             builder.Services.AddScoped<IBasketServices, BasketServices>();
             builder.Services.AddScoped<ICachRepository,CachRepository>();
             builder.Services.AddScoped<ICashService,CashService>();
+            builder.Services.Configure<ApiBehaviorOptions>(option =>
+            {
+                option.InvalidModelStateResponseFactory = ApiResponceFactory.GenerateApiValidationResponce; // Validation ModelState
+                
+            });
+               
 
             #endregion
 

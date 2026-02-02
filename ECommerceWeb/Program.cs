@@ -6,7 +6,9 @@ using ECommerce.Presistance.Repository;
 using ECommerce.Service;
 using ECommerce.Service.MappingProfiles;
 using ECommerce.ServiceAbstraction;
+using ECommerceWeb.CustomeMiddleWare;
 using ECommerceWeb.Extentions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;
@@ -60,6 +62,32 @@ namespace ECommerceWeb
             await app.SeedDataAsync();
             #endregion
 
+            #region Pioeline
+            #region Handel Exceptions 
+            //app.Use(async (context, next) =>
+            //  {
+            //      try
+            //      {
+            //          await next.Invoke(context);
+            //      }
+            //      catch (Exception ex)
+            //      {
+            //          Console.WriteLine(ex.Message);
+            //          context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+
+            //          // return response
+
+            //          await context.Response.WriteAsJsonAsync(new
+            //          {
+            //              StatusCode = StatusCodes.Status500InternalServerError,
+            //              Message = $"An unexpected error occurred=>{ex.Message}"
+            //          });
+            //      }
+            //  }); 
+
+            app.UseMiddleware<ExceptionHandlerMiddleWare>();
+            #endregion
+
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
@@ -75,7 +103,9 @@ namespace ECommerceWeb
 
             app.MapControllers();
 
-            app.Run();
+            app.Run(); 
+
+            #endregion
         }
     }
 }

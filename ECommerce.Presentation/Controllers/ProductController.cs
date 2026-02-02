@@ -2,6 +2,7 @@
 using ECommerce.ServiceAbstraction;
 using ECommerce.Shared;
 using ECommerce.Shared.ProductDtos;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerce.Presentation.Controllers
@@ -32,15 +33,11 @@ namespace ECommerce.Presentation.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductDTO>> GetProductById(int id)
         {
-          throw new Exception();
-
-
+          
             var product = await _productServices.GetProductByIdAsync(id);
-                 
-                
+           
                 return Ok(product);
            
-            
         }
         // Get All Brands
         [HttpGet("brands")]

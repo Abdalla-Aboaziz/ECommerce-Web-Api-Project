@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ECommerce.Service.Exceptions;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerceWeb.CustomeMiddleWare
 {
@@ -18,35 +19,47 @@ namespace ECommerceWeb.CustomeMiddleWare
             try
             {
                 await _next.Invoke(context);
-                if (context.Response.StatusCode == StatusCodes.Status404NotFound)
-                {
-                    // Log 404 errors
-                    var response = new ProblemDetails
-                    {
-                        Status = StatusCodes.Status404NotFound,
-                        Title = "Error While Processing Http request  -EndPoint Not Found",
-                        Detail = $"The requested resource(EndPoint) '{context.Request.Path}' was not found on the server.",
-                        Instance = context.Request.Path
-                    };
-                    await context.Response.WriteAsJsonAsync(response);
-
-                }
+                await HandelNotFoundEndPointAsync(context);
             }
             catch (Exception ex)
             {
                 // Logging 
-                _logger.LogError("Something Went Wrong");
-                context.Response.StatusCode= StatusCodes.Status500InternalServerError;
+                _logger.LogError(ex,"Something Went Wrong");
+               
                 //return custom error response
                 var problemDetails = new ProblemDetails
                 {
-                    Status = StatusCodes.Status500InternalServerError,
-                    Title = "Enternal Server Error",
+                    Status =ex switch
+                    {
+                        NotFoundException => StatusCodes.Status404NotFound,
+                        _=> StatusCodes.Status500InternalServerError,
+                    } ,
+                    Title = "Error While Processing http request",
                     Detail = ex.Message,
                     Instance = context.Request.Path
                 };
+                context.Response.StatusCode = problemDetails.Status.Value;
                 await context.Response.WriteAsJsonAsync(problemDetails);
             }
+        }
+
+        private static async Task HandelNotFoundEndPointAsync(HttpContext context)
+        {
+            if (context.Response.StatusCode == StatusCodes.Status404NotFound)
+            {
+                // Log 404 errors(EndPoint Not Found)
+                var response = new ProblemDetails
+                {
+                    Status = StatusCodes.Status404NotFound,
+                    Title = "Error While Processing Http request  -EndPoint Not Found",
+                    Detail = $"The requested resource(EndPoint) '{context.Request.Path}' was not found on the server.",
+                    Instance = context.Request.Path
+                };
+                await context.Response.WriteAsJsonAsync(response);
+
+            }
+
+
         }
     }
 }

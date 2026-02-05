@@ -60,6 +60,7 @@ namespace ECommerceWeb
             builder.Services.AddScoped<IBasketServices, BasketServices>();
             builder.Services.AddScoped<ICachRepository,CachRepository>();
             builder.Services.AddScoped<ICashService,CashService>();
+            builder.Services.AddScoped<IAuthenticationSerivce, AuthenticationSerivce>();
             builder.Services.Configure<ApiBehaviorOptions>(option =>
             {
                 option.InvalidModelStateResponseFactory = ApiResponceFactory.GenerateApiValidationResponce; // Validation ModelState

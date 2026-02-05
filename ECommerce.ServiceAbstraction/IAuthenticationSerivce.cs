@@ -1,0 +1,18 @@
+﻿using ECommerce.Shared.CommonResult;
+using ECommerce.Shared.IdentityDtos;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ECommerce.ServiceAbstraction
+{
+    public interface IAuthenticationSerivce
+    {
+        // login =>Token ,DisplayName ,Email
+        // register=> UserDto
+        Task<Result<UserDto>> LoginAsync(LoginDto loginDto);
+         Task<Result<UserDto>> RegisterAsync(RegisterDto registerDto);
+    }
+}

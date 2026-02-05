@@ -1,7 +1,9 @@
 
 using ECommerce.Domain.Contracts;
+using ECommerce.Domain.Entities.IdentityModule;
 using ECommerce.Presistance.Data.DataSeeding;
 using ECommerce.Presistance.Data.DBContexts;
+using ECommerce.Presistance.IdentityData.DataSeed;
 using ECommerce.Presistance.IdentiyData.DbContext;
 using ECommerce.Presistance.Repository;
 using ECommerce.Service;
@@ -11,6 +13,7 @@ using ECommerceWeb.CustomeMiddleWare;
 using ECommerceWeb.Extentions;
 using ECommerceWeb.Factory;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -46,7 +49,9 @@ namespace ECommerceWeb
             //builder.Services.AddTransient<ProductPictureResolver>(); // Register the resolver
             builder.Services.AddAutoMapper(typeof(ServiceAssemplyRefrence).Assembly);
             builder.Services.AddScoped<IProductServices,ProductService>();
-            builder.Services.AddScoped<IDataInitializer,DataIntializer>();
+            builder.Services.AddKeyedScoped<IDataInitializer,DataIntializer>("Default");
+            builder.Services.AddKeyedScoped<IDataInitializer, IdentityDataInitalizer>("Identity");
+
             builder.Services.AddSingleton<IConnectionMultiplexer>(s =>
             {
                 return ConnectionMultiplexer.Connect(builder.Configuration.GetConnectionString("RedisConnection")!);
@@ -64,7 +69,11 @@ namespace ECommerceWeb
             {
                option.UseSqlServer(builder.Configuration.GetConnectionString("IdentityConnection"));
             });
-               
+
+            //  builder.Services.AddIdentity<ApplicationUser,IdentityRole>(); 
+            builder.Services.AddIdentityCore<ApplicationUser>().AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<StoreIdentityDbContext>(); 
+
 
             #endregion
 
@@ -74,6 +83,7 @@ namespace ECommerceWeb
             await  app.MigrateDatabaseAsync();
             await app.SeedDataAsync();
             await app.MigrateIdentityDatabaseAsync();
+            await app.SeedIdentityDataAsync();
             #endregion
 
             #region Pipeline

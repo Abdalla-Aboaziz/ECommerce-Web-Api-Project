@@ -2,6 +2,7 @@
 using ECommerce.Domain.Contracts;
 using ECommerce.Presistance.Data.DataSeeding;
 using ECommerce.Presistance.Data.DBContexts;
+using ECommerce.Presistance.IdentiyData.DbContext;
 using ECommerce.Presistance.Repository;
 using ECommerce.Service;
 using ECommerce.Service.MappingProfiles;
@@ -59,6 +60,10 @@ namespace ECommerceWeb
                 option.InvalidModelStateResponseFactory = ApiResponceFactory.GenerateApiValidationResponce; // Validation ModelState
                 
             });
+            builder.Services.AddDbContext<StoreIdentityDbContext>(option =>
+            {
+               option.UseSqlServer(builder.Configuration.GetConnectionString("IdentityConnection"));
+            });
                
 
             #endregion
@@ -66,11 +71,12 @@ namespace ECommerceWeb
             var app = builder.Build();
 
             #region DataSeeding
-             await  app.MigrateDatabaseAsync();
+            await  app.MigrateDatabaseAsync();
             await app.SeedDataAsync();
+            await app.MigrateIdentityDatabaseAsync();
             #endregion
 
-            #region Pioeline
+            #region Pipeline
             #region Handel Exceptions 
             //app.Use(async (context, next) =>
             //  {

@@ -2,6 +2,7 @@
 using ECommerce.ServiceAbstraction;
 using ECommerce.Shared;
 using ECommerce.Shared.ProductDtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,6 +21,7 @@ namespace ECommerce.Presentation.Controllers
 
         [HttpGet]
         [RedisCashe]
+        [Authorize]
         // GET: api/Product
         public async Task<ActionResult<IEnumerable<ProductDTO>>> GetAllProducts([FromQuery]ProductQueryParams queryParams)
         {

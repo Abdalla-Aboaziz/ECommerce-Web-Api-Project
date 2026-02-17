@@ -12,12 +12,15 @@ using ECommerce.ServiceAbstraction;
 using ECommerceWeb.CustomeMiddleWare;
 using ECommerceWeb.Extentions;
 using ECommerceWeb.Factory;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using StackExchange.Redis;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace ECommerceWeb
@@ -73,7 +76,25 @@ namespace ECommerceWeb
 
             //  builder.Services.AddIdentity<ApplicationUser,IdentityRole>(); 
             builder.Services.AddIdentityCore<ApplicationUser>().AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<StoreIdentityDbContext>(); 
+                .AddEntityFrameworkStores<StoreIdentityDbContext>();
+
+            builder.Services.AddAuthentication(opt =>
+            {
+                opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(opt =>
+            {
+                opt.SaveToken=true;
+                opt.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidIssuer=builder.Configuration["JwtOptions:issuer"],
+                        ValidAudience=builder.Configuration["JwtOptions:audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtOptions:secretKey"]!))
+                };
+            });
 
 
             #endregion

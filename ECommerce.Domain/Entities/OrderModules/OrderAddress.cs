@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ECommerce.Domain.Entities.OrderModules
 {
-    public class OrderAdress
+    public class OrderAddress
     {
         public string FirstName { get; set; }=default!;
         public string LastName { get; set; } = default!;

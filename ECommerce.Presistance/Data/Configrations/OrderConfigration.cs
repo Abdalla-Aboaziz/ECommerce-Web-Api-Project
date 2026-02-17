@@ -9,7 +9,7 @@ namespace ECommerce.Presistance.Data.Configrations
         public void Configure(EntityTypeBuilder<Order> builder)
         {
             builder.Property(x => x.Subtotal).HasPrecision(8, 2);
-            builder.OwnsOne(x => x.Adress, OEntity =>
+            builder.OwnsOne(x => x.Address, OEntity =>
             {
                 OEntity.Property(x => x.FirstName).HasMaxLength(50);
                 OEntity.Property(x => x.LastName).HasMaxLength(50);

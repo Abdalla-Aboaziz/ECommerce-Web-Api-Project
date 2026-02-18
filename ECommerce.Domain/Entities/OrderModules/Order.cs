@@ -18,6 +18,7 @@ namespace ECommerce.Domain.Entities.OrderModules
         public decimal Subtotal { get; set; }
         public decimal getTotal() => Subtotal + DeliveryMethod.Price;
 
+        public string? PaymentIntendId { get; set; }
 
     }
 }
